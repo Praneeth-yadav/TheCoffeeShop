@@ -2,9 +2,13 @@
   display: flex;
   background-color: cadetblue;
   padding: 1rem;
-  flex-direction: column;
-  width: 5rem;
-  height: 100rem;
+  flex-direction: row;
+
+  justify-content: end;
 }
-
-
+.wel {
+  margin-right: auto;
+}
+a {
+  font-size: larger;
+}

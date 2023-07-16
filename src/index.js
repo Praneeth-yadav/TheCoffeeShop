@@ -7,19 +7,22 @@ import Dashboard from "./components/Dashboard";
 import { Newuser } from "./components/Newuser";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        {/* <Route index element={<App />} /> */}
-        <Route index path="/" element={<Login />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="newUser" element={<Newuser />} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
+  <ChakraProvider>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route index element={<App />} /> */}
+          <Route index path="/" element={<Login />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="newUser" element={<Newuser />} />
+        </Routes>
+      </BrowserRouter>
+    </React.StrictMode>
+  </ChakraProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

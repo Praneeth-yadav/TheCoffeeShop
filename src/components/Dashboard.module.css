@@ -3,3 +3,12 @@
   font-style: italic;
   color: orange;
 }
+.itemsmod {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.content {
+  width: 100rem;
+  height: 100rem;
+}
