@@ -13,18 +13,54 @@ const Dashboard = (state) => {
         item: "expresso1",
         desc: "this is a",
         imglocation: "./resources/a.jpeg",
+        category: "coffee",
+        quantity: "2",
+        price: "230",
       },
       {
         id: "2",
         item: "expresso2",
         desc: "this is b",
         imglocation: "./resources/a.jpeg",
+        category: "coffee",
+        quantity: "2",
+        price: "230",
       },
       {
         id: "3",
         item: "expresso3",
         desc: "this is c",
         imglocation: "./resources/a.jpeg",
+        category: "coffee",
+        quantity: "2",
+        price: "230",
+      },
+      {
+        id: "4",
+        item: "pastry4",
+        desc: "this is c",
+        imglocation: "./resources/a.jpeg",
+        category: "pastry",
+        quantity: "5",
+        price: "230",
+      },
+      {
+        id: "5",
+        item: "pastry5",
+        desc: "this is c",
+        imglocation: "./resources/a.jpeg",
+        category: "pastry",
+        quantity: "6",
+        price: "230",
+      },
+      {
+        id: "6",
+        item: "savoury2",
+        desc: "this is c",
+        imglocation: "./resources/a.jpeg",
+        category: "savoury",
+        quantity: "2",
+        price: "230",
       },
     ],
   };
@@ -44,32 +80,22 @@ const Dashboard = (state) => {
     } else {
       navigate("/", { replace: true });
     }
-  }, []);
-  console.log("response", response.data[0]);
-  const row = [];
-  for (let i = 1; i < 4; i++) {
-    // note: we are adding a key prop here to allow react to uniquely identify each
-    // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-    row.push(
-      <Items className={dashboardStyle.item} props={response.data[{ i }]} />
-    );
-  }
+  }, [authenticated]);
   return (
-    <div  className={dashboardStyle.content}>
+    <div className={dashboardStyle.content}>
       <Navbar name={location.state.name} />
       <div className={dashboardStyle.itemsmod}>
-        <Items className={dashboardStyle.item} props={response.data[0]} />
-        <Items className={dashboardStyle.item} props={response.data[0]} />
-
-        <Items className={dashboardStyle.item} props={response.data[0]} />
-
-        <Items className={dashboardStyle.item} props={response.data[0]} />
-        <Items className={dashboardStyle.item} props={response.data[0]} />
-        <Items className={dashboardStyle.item} props={response.data[0]} />
-
-        <Items className={dashboardStyle.item} props={response.data[0]} />
-
-        <Items className={dashboardStyle.item} props={response.data[0]} />
+        {response.data.map((data) => {
+          // console.log("data=", data.id);
+          // console.log("data=", data);
+          return (
+            <Items
+              className={dashboardStyle.item}
+              props={data}
+              name={location.state.name}
+            />
+          );
+        })}
       </div>
     </div>
   );

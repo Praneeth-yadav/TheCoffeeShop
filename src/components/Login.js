@@ -12,6 +12,7 @@ const Login = () => {
   const users = [
     { username: "User", password: "Password" },
     { username: "Praneeth", password: "Password" },
+    { username: "Admin", password: "Admin" },
   ];
   const handleSubmit = (e) => {
     e.preventDefault();
