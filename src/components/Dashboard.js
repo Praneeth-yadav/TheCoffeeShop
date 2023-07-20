@@ -4,6 +4,7 @@ import { Navbar } from "./Navbar";
 import { Items } from "./Items";
 
 import { useNavigate, useLocation } from "react-router-dom";
+import { Newitem } from "./Newitem";
 
 const Dashboard = (state) => {
   const response = {
@@ -81,9 +82,15 @@ const Dashboard = (state) => {
       navigate("/", { replace: true });
     }
   }, [authenticated]);
+  function Additem() {
+    if (location.state.name == "Admin") {
+      return <Newitem />;
+    } else return <></>;
+  }
   return (
     <div className={dashboardStyle.content}>
       <Navbar name={location.state.name} />
+      <Additem />
       <div className={dashboardStyle.itemsmod}>
         {response.data.map((data) => {
           // console.log("data=", data.id);

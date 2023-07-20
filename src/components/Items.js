@@ -18,10 +18,6 @@ export const Items = ({ props, name }) => {
   // console.log("Card props", props);
   // console.log("Card props item", props.item);
   // console.log("user logged", name);
-  ///TODO
-  // const [desc, setdesc] = useState(props.desc);
-  // const [price, setprice] = useState(props.price);
-  // const [qty, setqty] = useState(props.quantity);
   const desc = useRef(props.desc);
   const price = useRef(props.price);
   const qty = useRef(props.quantity);
