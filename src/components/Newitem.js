@@ -6,18 +6,31 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { Uploadimage } from "./Uploadimage";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import { useRef, useState } from "react";
 import Newitemstyle from "./Newitem.module.css";
-import { useRef } from "react";
+import { Uploadimage } from "./Uploadimage";
 
 export const Newitem = () => {
-  const Itemname = useRef(null);
+  const [itemname, setitemname] = useState(null);
   const desc = useRef(null);
   const price = useRef(null);
   const qty = useRef(null);
   const category = useRef(null);
-  console.log("item", Itemname, " ", desc, price, qty, category);
+  const imageurl = useRef(null);
+  const storage = getStorage();
+  // console.log("item", itemname, " ", desc, price, qty, category, url);
+  const additem = () => {
+    getDownloadURL(ref(storage, `images/${itemname}`))
+      .then((url) => {
+        console.log("image url", url);
+        imageurl.current = url;
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.log("Error retreiving image url");
+      });
+  };
   return (
     <>
       <div className={Newitemstyle.iteminput}>
@@ -28,7 +41,7 @@ export const Newitem = () => {
               type="text"
               placeholder="Add Name"
               onChange={(e) => {
-                Itemname.current = e.target.value;
+                setitemname(e.target.value);
               }}
             />
           </InputGroup>
@@ -62,7 +75,11 @@ export const Newitem = () => {
               }}
             />
           </InputGroup>
-          {<Uploadimage name={Itemname.current} />}
+          {itemname !== null && itemname !== "" ? (
+            <Uploadimage name={itemname} />
+          ) : (
+            <></>
+          )}
           <InputGroup size="sm">
             <InputLeftAddon children="$" />
             <Input
@@ -72,7 +89,9 @@ export const Newitem = () => {
               }}
             />
           </InputGroup>
-          <Button colorScheme="teal">Add Item</Button>
+          <Button colorScheme="teal" onClick={additem}>
+            Add Item
+          </Button>
         </Stack>
       </div>
     </>

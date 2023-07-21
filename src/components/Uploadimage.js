@@ -4,10 +4,9 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useRef, useState } from "react";
 
 export const Uploadimage = ({ name }) => {
-  console.log("name in image", name);
-
-  const [disabledbutton, setdisabledbutton] = useState(true);
   const [image, setimage] = useState(null);
+
+  console.log("name in image", name);
 
   // Create a storage reference from our storage service
   const storageRef = ref(storage, `images/${name}`);
@@ -16,18 +15,15 @@ export const Uploadimage = ({ name }) => {
       return;
     }
     uploadBytes(storageRef, image).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
+      console.log("Uploaded image!");
+      console.log("snapshot", snapshot);
     });
   }
 
   return (
     <InputGroup>
       <Input type="file" onChange={(e) => setimage(e.target.files[0])} />
-      <Button
-        colorScheme="teal"
-        disabled={disabledbutton}
-        onClick={uploadImage}
-      >
+      <Button colorScheme="teal" onClick={uploadImage}>
         upload
       </Button>
     </InputGroup>

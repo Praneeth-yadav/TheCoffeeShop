@@ -1,18 +1,19 @@
-import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 import {
-  Box,
-  Image,
-  Stack,
-  Heading,
-  Text,
-  Divider,
-  ButtonGroup,
   Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  Divider,
+  Heading,
+  Image,
   Input,
   InputGroup,
   InputLeftAddon,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 export const Items = ({ props, name }) => {
   // console.log("Card props", props);
@@ -34,13 +35,6 @@ export const Items = ({ props, name }) => {
     qty.current = e.target.value;
   }
 
-  console.log("checking state ", props.id, "  ", desc, "  ", price, "  ", qty);
-  function handleChange({ target }) {
-    console.log("onchange", target);
-    this.setState({
-      [target.name]: target.value,
-    });
-  }
   function deleteItem() {
     console.log("Delete item   =   ", props);
   }
