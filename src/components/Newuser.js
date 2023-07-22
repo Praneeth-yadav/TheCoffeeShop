@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import newuserStyle from "./Newuser.module.css";
 
 export function Newuser() {
   // States for registration
@@ -71,7 +72,7 @@ export function Newuser() {
   };
 
   return (
-    <div className="form">
+    <div className={newuserStyle.form}>
       <div>
         <h1>User Registration</h1>
       </div>
