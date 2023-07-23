@@ -8,6 +8,7 @@ import { Newuser } from "./components/Newuser";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
+import Cartpage from "./components/Cartpage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,6 +20,7 @@ root.render(
           <Route index path="/" element={<Login />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="newUser" element={<Newuser />} />
+          <Route path="cartpage" element={<Cartpage />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

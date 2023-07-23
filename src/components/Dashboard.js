@@ -6,7 +6,7 @@ import { Items } from "./Items";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Newitem } from "./Newitem";
 
-const Dashboard = (state) => {
+const Dashboard = () => {
   const response = {
     data: [
       {
@@ -67,14 +67,14 @@ const Dashboard = (state) => {
   };
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("State:  ", state.name);
+  console.log("location data:  ", location);
 
   const [authenticated, setauthenticated] = useState(null);
   console.log("Auth ", authenticated);
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("authenticated");
-    console.log("loggedin", state.name);
+    console.log("loggedin", location.state.name);
 
     if (loggedInUser) {
       setauthenticated(loggedInUser);

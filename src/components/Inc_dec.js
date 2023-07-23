@@ -1,5 +1,6 @@
 import { Button, Input, useNumberInput, HStack } from "@chakra-ui/react";
-export function Inc_dec({ maxqty }) {
+import { useEffect, useRef } from "react";
+export function Inc_dec({ maxqty, order_qty }) {
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
@@ -12,12 +13,24 @@ export function Inc_dec({ maxqty }) {
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
   const input = getInputProps();
+  function handlechange(e) {
+    console.log("order ", e.target.value);
+    console.log(input.value);
+    order_qty(e.target.value);
+  }
+  function handleclick() {
+    order_qty(input.value);
+  }
 
   return (
     <HStack maxW="320px">
-      <Button {...dec}>-</Button>
-      <Input {...input} />
-      <Button {...inc}>+</Button>
+      <Button {...dec} onClick={handleclick}>
+        -
+      </Button>
+      <Input {...input} readOnly />
+      <Button {...inc} onClick={handleclick}>
+        +
+      </Button>
     </HStack>
   );
 }

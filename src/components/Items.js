@@ -13,16 +13,24 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Inc_dec } from "./Inc_dec";
 
 export const Items = ({ props, name }) => {
   // console.log("Card props", props);
   // console.log("Card props item", props.item);
   // console.log("user logged", name);
+  const order = useRef(0);
   const desc = useRef(props.desc);
   const price = useRef(props.price);
   const qty = useRef(props.quantity);
+  const order_qty = useCallback(
+    (oqty) => {
+      console.log("order quantity", oqty);
+      order.current = oqty;
+    },
+    [order]
+  );
   function handledesc(e) {
     console.log("set desc ", e.target.value);
     desc.current = e.target.value;
@@ -42,6 +50,12 @@ export const Items = ({ props, name }) => {
   function updateItem() {
     console.log("Update item    =   ", props);
   }
+  function buyItem() {
+    console.log("Update item    =   ", props);
+  }
+  function addItem() {
+    console.log("Update item    =   ", props);
+  }
   function Bodytype({ user }) {
     if (user) {
       return (
@@ -53,7 +67,7 @@ export const Items = ({ props, name }) => {
           <Text color="blue.600" fontSize="2xl">
             ${props.price}
           </Text>
-          <Inc_dec maxqty={props.quantity}/>
+          <Inc_dec maxqty={props.quantity} order_qty={order_qty} />
         </>
       );
     } else {
@@ -96,10 +110,10 @@ export const Items = ({ props, name }) => {
     if (user) {
       return (
         <ButtonGroup spacing="2">
-          <Button variant="solid" colorScheme="blue">
+          <Button variant="solid" colorScheme="blue" onClick={() => buyItem()}>
             Buy now
           </Button>
-          <Button variant="ghost" colorScheme="blue">
+          <Button variant="ghost" colorScheme="blue" onClick={() => addItem()}>
             Add to cart
           </Button>
         </ButtonGroup>

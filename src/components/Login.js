@@ -20,6 +20,7 @@ const Login = () => {
     const account = users.find(
       (user) => user.username === username.current.value
     );
+    localStorage.setItem("authenticated", true);
     if (account && account.password === password.current.value) {
       setauthenticated(true);
       localStorage.setItem("authenticated", true);
@@ -49,7 +50,7 @@ const Login = () => {
         <input className={loginStyle.btn} type="submit" value="Submit" />
       </form>
       <div>
-        <a onClick={() => navigate("./newUser", { replace: true })}>New User</a>
+        <a onClick={() => navigate("./newuser", { replace: true })}>New User</a>
       </div>
     </div>
   );
