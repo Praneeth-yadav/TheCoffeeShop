@@ -67,14 +67,14 @@ const Dashboard = (state) => {
   };
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("State:  ", location.state.name);
+  console.log("State:  ", state.name);
 
   const [authenticated, setauthenticated] = useState(null);
   console.log("Auth ", authenticated);
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("authenticated");
-    console.log("loggedin", location.state.name);
+    console.log("loggedin", state.name);
 
     if (loggedInUser) {
       setauthenticated(loggedInUser);
@@ -82,6 +82,7 @@ const Dashboard = (state) => {
       navigate("/", { replace: true });
     }
   }, [authenticated]);
+
   function Additem() {
     if (location.state.name == "Admin") {
       return <Newitem />;
