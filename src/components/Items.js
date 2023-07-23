@@ -14,6 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRef } from "react";
+import { Inc_dec } from "./Inc_dec";
 
 export const Items = ({ props, name }) => {
   // console.log("Card props", props);
@@ -52,6 +53,7 @@ export const Items = ({ props, name }) => {
           <Text color="blue.600" fontSize="2xl">
             ${props.price}
           </Text>
+          <Inc_dec maxqty={props.quantity}/>
         </>
       );
     } else {
