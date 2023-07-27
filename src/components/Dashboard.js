@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dashboardStyle from "./Dashboard.module.css";
-import { Navbar } from "./Navbar";
 import { Items } from "./Items";
+import { Navbar } from "./Navbar";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { IconButton, Input } from "@chakra-ui/react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Newitem } from "./Newitem";
 
 const Dashboard = () => {
@@ -70,6 +71,9 @@ const Dashboard = () => {
   console.log("location data:  ", location);
 
   const [authenticated, setauthenticated] = useState(null);
+  const [search, setsearch] = useState(response.data);
+  const [searchval, setsearchval] = useState();
+
   console.log("Auth ", authenticated);
 
   useEffect(() => {
@@ -88,12 +92,42 @@ const Dashboard = () => {
       return <Newitem />;
     } else return <></>;
   }
+  const searchitem = (e) => {
+    e.preventDefault();
+    console.log("search bar-", e.target.value);
+    setsearchval(e.target.value);
+    console.log("search val-", searchval);
+    const resp1 = response.data.filter((data) => {
+      return (data.item || data.category).includes(e.target.value);
+    });
+    console.log("resp1=", resp1);
+    setsearch(resp1);
+  };
+  function Searchbar() {
+    if (location.state.name != "Admin") {
+      return (
+        <>
+          <Input
+            //ref={searchval}
+            value={searchval}
+            onChange={searchitem}
+            className={dashboardStyle.search}
+            variant="filled"
+            placeholder="Search"
+            autoFocus
+          />
+        </>
+      );
+    }
+  }
   return (
     <div className={dashboardStyle.content}>
       <Navbar name={location.state.name} />
       <Additem />
+      <Searchbar />
       <div className={dashboardStyle.itemsmod}>
-        {response.data.map((data) => {
+        
+        {search.map((data) => {
           // console.log("data=", data.id);
           // console.log("data=", data);
           return (

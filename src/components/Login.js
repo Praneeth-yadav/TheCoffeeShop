@@ -33,19 +33,21 @@ const Login = () => {
   };
   return (
     <div className={loginStyle.inputform}>
-      <p>Welcome Back</p>
+      <p>The Coffee Shop</p>
       <form onSubmit={handleSubmit}>
         <input
           className={loginStyle.btn}
           type="text"
           name="Username"
           ref={username}
+          placeholder="Username"
         />
         <input
           className={loginStyle.btn}
           type="password"
           name="Password"
           ref={password}
+          placeholder="Password"
         />
         <input className={loginStyle.btn} type="submit" value="Submit" />
       </form>

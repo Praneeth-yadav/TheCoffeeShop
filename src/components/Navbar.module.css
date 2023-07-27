@@ -3,7 +3,6 @@
   background-color: cadetblue;
   padding: 1rem;
   flex-direction: row;
-
   justify-content: end;
 }
 .wel {
@@ -11,4 +10,9 @@
 }
 a {
   font-size: larger;
+}
+.btn1,
+.btn2,
+.btn3 {
+  margin-right: 10px;
 }

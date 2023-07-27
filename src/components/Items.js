@@ -51,10 +51,10 @@ export const Items = ({ props, name }) => {
     console.log("Update item    =   ", props);
   }
   function buyItem() {
-    console.log("Update item    =   ", props);
+    console.log("buy item    =   ", props);
   }
   function addItem() {
-    console.log("Update item    =   ", props);
+    console.log("add item    =   ", props);
   }
   function Bodytype({ user }) {
     if (user) {
@@ -67,7 +67,12 @@ export const Items = ({ props, name }) => {
           <Text color="blue.600" fontSize="2xl">
             ${props.price}
           </Text>
-          <Inc_dec maxqty={props.quantity} order_qty={order_qty} />
+          <Inc_dec
+            maxqty={props.quantity}
+            order_qty={order_qty}
+            qty_value={order.current}
+            value={qty.current}
+          />
         </>
       );
     } else {

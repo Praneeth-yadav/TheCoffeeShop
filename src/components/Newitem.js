@@ -6,10 +6,15 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { useRef, useState } from "react";
+import axios from "axios";
+import { getStorage } from "firebase/storage";
+import { useCallback, useRef, useState } from "react";
 import Newitemstyle from "./Newitem.module.css";
 import { Uploadimage } from "./Uploadimage";
+
+const api = axios.create({
+  baseURL: "http://localhost:4027",
+});
 
 export const Newitem = () => {
   const [itemname, setitemname] = useState(null);
@@ -19,17 +24,61 @@ export const Newitem = () => {
   const category = useRef(null);
   const imageurl = useRef(null);
   const storage = getStorage();
-  // console.log("item", itemname, " ", desc, price, qty, category, url);
-  const additem = () => {
-    getDownloadURL(ref(storage, `images/${itemname}`))
-      .then((url) => {
-        console.log("image url", url);
-        imageurl.current = url;
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.log("Error retreiving image url");
+  const imgurl = useCallback(
+    (murl) => {
+      console.log("url is - ", murl);
+      imageurl.current = murl;
+    },
+    [imageurl]
+  );
+  const checkimage = () => {
+    if (imageurl.current == null) {
+      return true;
+    }
+    return false;
+  };
+
+  const additem = async () => {
+    // const imgurl = await fetchurl();
+
+    // if (imageurl==null) {
+    //   console.log("Retrying to fetch image url...");
+    //   const retryURLFetched = await fetchurl();
+
+    //   if (!retryURLFetched) {
+    //     console.log("Still unable to fetch image url. Aborting item addition.");
+    //     alert("Item cannot be added. Try Again");
+    //     return;
+    //   }
+    // }
+    /////////////
+    // while (imageurl.current == null) {
+    //   console.log("in while");
+    //   console.log("image current-1-", imageurl.current);
+    //   setTimeout(() => {
+    //     console.log(" process inprogress!");
+    //   }, 9000);
+    //   await getDownloadURL(ref(storage, `images/${itemname}`))
+    //     .then((url) => {
+    //       imageurl.current = url;
+    //       console.log("image url current", imageurl.current);
+    //     })
+    //     .catch((error) => {
+    //       console.log("Error retreiving image url", error);
+    //     });
+    //   console.log("image current-2-", imageurl.current);
+    // }
+    const data = { desc, price, qty, category, imageurl, storage };
+    console.log("item to be added -  ", data);
+    const res = async () => {
+      api.post("/", {
+        desc: desc.current,
+        price: price.current,
+        qty: qty.current,
+        category: category.current.value,
+        imageurl: imageurl.current,
       });
+    };
   };
   return (
     <>
@@ -47,7 +96,8 @@ export const Newitem = () => {
           </InputGroup>
           <Select
             placeholder="Select Category"
-            onClick={(e) => {
+            onChange={(e) => {
+              console.log("category", e.target.value);
               category.current = e.target.value;
             }}
           >
@@ -68,7 +118,7 @@ export const Newitem = () => {
           <InputGroup>
             <InputLeftAddon children="Available Quantity" />
             <Input
-              type="text"
+              type="number"
               placeholder="Quantity"
               onChange={(e) => {
                 qty.current = e.target.value;
@@ -76,7 +126,7 @@ export const Newitem = () => {
             />
           </InputGroup>
           {itemname !== null && itemname !== "" ? (
-            <Uploadimage name={itemname} />
+            <Uploadimage name={itemname} imgurl={imgurl} />
           ) : (
             <></>
           )}
@@ -89,7 +139,7 @@ export const Newitem = () => {
               }}
             />
           </InputGroup>
-          <Button colorScheme="teal" onClick={additem}>
+          <Button disabled={true} colorScheme="teal" onClick={additem}>
             Add Item
           </Button>
         </Stack>

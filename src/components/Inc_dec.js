@@ -1,10 +1,10 @@
 import { Button, Input, useNumberInput, HStack } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
-export function Inc_dec({ maxqty, order_qty }) {
+export function Inc_dec({ maxqty, order_qty,qty_value }) {
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
-      defaultValue: 0,
+      defaultValue: qty_value,
       min: 0,
       max: maxqty,
       precision: 0,
