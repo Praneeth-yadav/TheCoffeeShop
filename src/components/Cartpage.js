@@ -12,6 +12,11 @@ import {
   Button,
   IconButton,
   Tooltip,
+  Card,
+  CardHeader,
+  CardBody,
+  Heading,
+  CardFooter,
 } from "@chakra-ui/react";
 import { DeleteIcon, CheckIcon } from "@chakra-ui/icons";
 import { useRef, useState } from "react";
@@ -203,8 +208,64 @@ const Cartpage = () => {
           </TableContainer>
         </>
       );
-    }else{
-      
+    } else {
+      return (
+        <>
+          {responsefull.map((resp) => {
+            console.log("resp", resp);
+            return (
+              <Card key={resp.user}>
+                <CardHeader>
+                  <Heading size="md">{resp.user} Order</Heading>
+                </CardHeader>
+                <CardBody>
+                  <TableContainer>
+                    <Table variant="simple" size="sm">
+                      <Thead>
+                        <Tr>
+                          <Th>Item</Th>
+                          <Th>Quantity</Th>
+                          <Th>Price/Unit</Th>
+                          <Th>Total</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {resp.data.map((data) => {
+                          total.current =
+                            total.current + data.price * data.quantity;
+                          return (
+                            <>
+                              <Tr>
+                                <Td>{data.item}</Td>
+                                <Td>{data.quantity}</Td>
+                                <Td>${data.price}</Td>
+                                <Td>${data.price * data.quantity}</Td>
+                              </Tr>
+                            </>
+                          );
+                        })}
+                      </Tbody>
+                      <Tfoot>
+                        <Tr>
+                          <Th></Th>
+                          <Th></Th>
+                          <Th></Th>
+                          <Th>
+                            <h1>
+                              <b>Total : {total.current}</b>
+                            </h1>
+                          </Th>
+                          <Th></Th>
+                        </Tr>
+                      </Tfoot>
+                    </Table>
+                  </TableContainer>
+                </CardBody>
+              </Card>
+            );
+          })}
+        </>
+      );
     }
   };
   return (
