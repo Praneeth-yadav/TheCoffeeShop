@@ -1,23 +1,36 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import loginStyle from "./Login.module.css";
+import axios from "axios";
 
 const Login = () => {
+  let users = null;
+  useEffect(() => {
+    try {
+      axios.get(`http://127.0.0.1:5000/login`).then((res) => {
+        console.log("result=", res);
+        users = res;
+        console.log("users", users);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
   const navigate = useNavigate();
   const username = useRef("");
   const password = useRef("");
   const [authenticated, setauthenticated] = useState(
     localStorage.getItem(localStorage.getItem("authenticated") || false)
   );
-  const users = [
-    { username: "User", password: "Password" },
-    { username: "Praneeth", password: "Password" },
-    { username: "Admin", password: "Admin" },
-  ];
+  // const users = [
+  //   { username: "User", password: "Password" },
+  //   { username: "Praneeth", password: "Password" },
+  //   { username: "Admin", password: "Admin" },
+  // ];
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(username.current.value, " --- ", password.current.value);
-    const account = users.find(
+    const account = users.data.find(
       (user) => user.username === username.current.value
     );
     localStorage.setItem("authenticated", true);
@@ -29,6 +42,8 @@ const Login = () => {
         { state: { id: 1, name: username.current.value } },
         { replace: true }
       );
+    } else {
+      alert("Invalid Credentials");
     }
   };
   return (

@@ -15,13 +15,16 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useRef } from "react";
 import { Inc_dec } from "./Inc_dec";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const Items = ({ props, name }) => {
-  // console.log("Card props", props);
+  //console.log("Card props", props);
   // console.log("Card props item", props.item);
   // console.log("user logged", name);
+  const navigate = useNavigate();
   const order = useRef(0);
-  const desc = useRef(props.desc);
+  const desc = useRef(props.description);
   const price = useRef(props.price);
   const qty = useRef(props.quantity);
   const order_qty = useCallback(
@@ -51,7 +54,21 @@ export const Items = ({ props, name }) => {
     console.log("Update item    =   ", props);
   }
   function buyItem() {
-    console.log("buy item    =   ", props);
+    const data = {
+      item: props.item, // Make sure 'props.item' contains the correct item name
+      quantity: order.current > 0 ? order.current : 1, // Set the quantity to a valid value (you can change this as needed)
+      price: props.price,
+      username: name, // Make sure 'props.price' contains the correct price
+    };
+    console.log("buy item    =   ", data);
+    try {
+      axios.post("http://127.0.0.1:5000/cart", data).then((response) => {
+        console.log(response.data);
+      });
+    } catch (e) {
+      console.log("Item cannot be added to cart", e);
+    }
+    navigate("/cartpage", { state: { id: 1, name: name } }, { replace: true });
   }
   function addItem() {
     console.log("add item    =   ", props);
@@ -149,8 +166,10 @@ export const Items = ({ props, name }) => {
     <Card maxW="sm">
       <CardBody>
         <Image
-          src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-          alt="Green double couch with wooden legs"
+          //src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+          // src=" https://firebasestorage.googleapis.com/v0/b/coffeeshop-imagestore.appspot.com/o/images%2Faddcoffee?alt=media&token=889e03bb-2048-46a5-83e0-ca03963a27a2"
+          src={props.imglocation}
+          alt="Loading..."
           borderRadius="lg"
         />
         <Stack mt="6" spacing="3">

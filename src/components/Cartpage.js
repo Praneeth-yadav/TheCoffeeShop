@@ -19,11 +19,13 @@ import {
   CardFooter,
 } from "@chakra-ui/react";
 import { DeleteIcon, CheckIcon } from "@chakra-ui/icons";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import axios from "axios";
 
 import { useLocation } from "react-router-dom";
+
 const Cartpage = () => {
-  const response = {
+  let response = {
     data: [
       {
         id: "1",
@@ -63,85 +65,34 @@ const Cartpage = () => {
       },
     ],
   };
-  const responsefull = [
-    {
-      user: "User",
-      data: [
-        {
-          id: "1",
-          item: "expresso1",
-          quantity: "2",
-          price: "230",
-        },
-        {
-          id: "2",
-          item: "expresso2",
-          quantity: "2",
-          price: "230",
-        },
-        {
-          id: "3",
-          item: "expresso3",
-          quantity: "2",
-          price: "230",
-        },
-        {
-          id: "4",
-          item: "pastry4",
-          quantity: "5",
-          price: "230",
-        },
-        {
-          id: "5",
-          item: "pastry5",
-          quantity: "6",
-          price: "230",
-        },
-        {
-          id: "6",
-          item: "savoury2",
-          quantity: "2",
-          price: "230",
-        },
-      ],
-    },
-    {
-      user: "Praneeth",
-      data: [
-        {
-          id: "1",
-          item: "expresso1",
-          quantity: "2",
-          price: "230",
-        },
-        {
-          id: "3",
-          item: "expresso3",
-          quantity: "2",
-          price: "230",
-        },
-        {
-          id: "4",
-          item: "pastry4",
-          quantity: "5",
-          price: "230",
-        },
+  const [responsefull, setresponsefull] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        axios.get(`http://127.0.0.1:5000/cart`).then((res) => {
+          console.log("result=", res.data);
+          setresponsefull(res.data);
+          console.log("response=", res.data);
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
 
-        {
-          id: "6",
-          item: "savoury2",
-          quantity: "2",
-          price: "230",
-        },
-      ],
-    },
-  ];
+    fetchData();
+  }, []);
   const location = useLocation();
   console.log("state in cart", location);
   const total = useRef(0);
   const [showtotal, setshowtotal] = useState(false);
+
   const Cart = () => {
     if (location.state.name !== "Admin") {
+      console.log("respomefull cart", responsefull);
+      response = responsefull.filter((data) => {
+        return data.username === location.state.name;
+      });
+      console.log("respome cart", response);
       return (
         <>
           <TableContainer>
@@ -165,7 +116,7 @@ const Cartpage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {response.data.map((data) => {
+                {response.map((data) => {
                   total.current = total.current + data.price * data.quantity;
                   return (
                     <>
@@ -214,9 +165,9 @@ const Cartpage = () => {
           {responsefull.map((resp) => {
             console.log("resp", resp);
             return (
-              <Card key={resp.user}>
+              <Card key={resp.username}>
                 <CardHeader>
-                  <Heading size="md">{resp.user} Order</Heading>
+                  <Heading size="md">{resp.username} Order</Heading>
                 </CardHeader>
                 <CardBody>
                   <TableContainer>
