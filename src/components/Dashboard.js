@@ -107,6 +107,8 @@ const Dashboard = () => {
               className={dashboardStyle.item}
               props={data}
               name={location.state.name}
+              setload={setload}
+              load={load}
             />
           );
         })}

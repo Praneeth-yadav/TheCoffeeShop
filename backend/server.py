@@ -61,9 +61,10 @@ def login():
     
     
 
-@app.route('/items',methods=["GET"])
+@app.route('/items',methods=["GET","DELETE","PUT"])
 def items():
     try:
+        if request.method == 'GET':    
             conn = mysql.connect()
             cursor =conn.cursor()
             cursor.execute("SELECT * FROM items")
@@ -89,7 +90,45 @@ def items():
 
             # jsonify the list of dictionaries
             resp = jsonify(item_list)
-            
+
+        elif request.method == 'DELETE':
+                data = request.json
+                conn = mysql.connect()
+                cursor =conn.cursor()
+                item = data.get('item')
+                cursor = conn.cursor()
+                cursor.execute("DELETE from items where item=%s ", (item))
+                conn.commit()
+                cursor.close()
+
+                response = jsonify({"message": "Item Deleted from cart successfully"})
+                return response, 200  
+        elif request.method == 'PUT':
+                data = request.json
+                print(data)
+                conn = mysql.connect()
+                cursor =conn.cursor()
+                # item = data.get('item')
+                # description = data.get('description')
+                # price = data.get('price')
+                # quantity = data.get('quantity')
+                item = request.json.get('item')
+                description = request.json.get('description')
+                price = request.json.get('price')
+                quantity = request.json.get('quantity')
+                print("Data received:", data)
+                print("Item:", item)
+                print("Description:", description)
+                print("Price:", price)
+                print("Quantity:", quantity)
+
+                cursor = conn.cursor()
+                cursor.execute("update items set description=%s,price=%s,quantity=%s where item=%s ;", (description,price,quantity,item))
+                conn.commit()
+                cursor.close()
+
+                response = jsonify({"message": "Item updated successfully"})
+                return response, 200        
             
     except:
         print("Something went wrong when writing to the file")
@@ -170,6 +209,7 @@ def cart():
             username=data.get('username')
             cursor = conn.cursor()
             cursor.execute("DELETE from cart where item=%s and username=%s", (item,username))
+            conn.commit()
             cursor.close()
 
             response = jsonify({"message": "Item Deleted from cart successfully"})

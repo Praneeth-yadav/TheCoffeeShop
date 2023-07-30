@@ -18,7 +18,7 @@ import { Inc_dec } from "./Inc_dec";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export const Items = ({ props, name }) => {
+export const Items = ({ props, name, setload, load }) => {
   //console.log("Card props", props);
   // console.log("Card props item", props.item);
   // console.log("user logged", name);
@@ -49,9 +49,46 @@ export const Items = ({ props, name }) => {
 
   function deleteItem() {
     console.log("Delete item   =   ", props);
+    console.log("item=", props.item);
+    const data = {
+      item: props.item,
+    };
+    console.log("delete item    =   ", data);
+    try {
+      axios
+        .delete("http://127.0.0.1:5000/items", {
+          headers: {
+            "Content-Type": "application/json", // Set the Content-Type header
+          },
+          data,
+        })
+        .then((response) => {
+          console.log(response.data);
+          setload(!load);
+        });
+    } catch (e) {
+      console.log("Item cannot be deleted from cart", e);
+    }
   }
   function updateItem() {
-    console.log("Update item    =   ", props);
+    console.log("Update item  previous  =   ", props);
+    console.log("item=", props.item);
+    console.log("price", price.current, "props price", props.quantity);
+    const data = {
+      item: props.item,
+      description: desc.current === "" ? props.description : desc.current,
+      quantity: qty.current === null ? props.quantity : qty.current, // Set the quantity to a valid value (you can change this as needed)
+      price: price.current === null ? props.price : price.current,
+    };
+    console.log("update item    =   ", data);
+    try {
+      axios.put("http://127.0.0.1:5000/items", data).then((response) => {
+        console.log(response.data);
+         setload(!load);
+      });
+    } catch (e) {
+      console.log("Item cannot be Updated ", e);
+    }
   }
   function buyItem() {
     const data = {
