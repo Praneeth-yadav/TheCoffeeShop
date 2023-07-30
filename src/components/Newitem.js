@@ -8,15 +8,11 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { getStorage } from "firebase/storage";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import Newitemstyle from "./Newitem.module.css";
 import { Uploadimage } from "./Uploadimage";
 
-const api = axios.create({
-  baseURL: "http://localhost:4027",
-});
-
-export const Newitem = () => {
+export const Newitem = ({ setload }) => {
   const [itemname, setitemname] = useState(null);
   const desc = useRef(null);
   const price = useRef(null);
@@ -70,16 +66,38 @@ export const Newitem = () => {
     // }
     const data = { desc, price, qty, category, imageurl, storage };
     console.log("item to be added -  ", data);
-    const res = async () => {
-      api.post("/", {
-        desc: desc.current,
-        price: price.current,
-        qty: qty.current,
-        category: category.current.value,
-        imageurl: imageurl.current,
-      });
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${year}-${month}-${day}`;
+    console.log(currentDate);
+    const itemstoadd = {
+      item: itemname,
+      description: desc.current,
+      price: price.current,
+      quantity: qty.current,
+      category: category.current.value,
+      imagelocation: imageurl.current,
+      createdDate: currentDate,
+      updatedDate: currentDate,
+      addedBy: "Admin",
     };
+
+    try {
+      axios
+        .post("http://127.0.0.1:5000/additems", itemstoadd)
+        .then((response) => {
+          console.log(response.data);
+          setload(true);
+        });
+    } catch (e) {
+      console.log("New Item cannot be added ", e);
+    }
   };
+
   return (
     <>
       <div className={Newitemstyle.iteminput}>

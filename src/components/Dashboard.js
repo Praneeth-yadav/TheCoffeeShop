@@ -9,6 +9,7 @@ import { Newitem } from "./Newitem";
 import axios from "axios";
 
 const Dashboard = () => {
+  const [load, setload] = useState(false);
   let response = {
     data: [
       {
@@ -25,7 +26,6 @@ const Dashboard = () => {
       },
     ],
   };
-  useEffect(() => {});
   const navigate = useNavigate();
   const location = useLocation();
   console.log("location data:  ", location);
@@ -57,18 +57,18 @@ const Dashboard = () => {
     };
 
     fetchData();
-  }, [authenticated, navigate, location.state.name]);
+  }, [authenticated, navigate, location.state.name, load]);
 
   function Additem() {
     if (location.state.name == "Admin") {
-      return <Newitem />;
+      return <Newitem setload={setload} />;
     } else return <></>;
   }
   const searchitem = (e) => {
     e.preventDefault();
-    console.log("search bar-", e.target.value);
+    // console.log("search bar-", e.target.value);
     setsearchval(e.target.value);
-    console.log("search val-", searchval);
+    // console.log("search val-", searchval);
     const resp1 = response.data.filter((data) => {
       return (data.item || data.category).includes(e.target.value);
     });
@@ -99,8 +99,8 @@ const Dashboard = () => {
       <Searchbar />
       <div className={dashboardStyle.itemsmod}>
         {search.map((data) => {
-          console.log("data=", data.id);
-          console.log("data=", data);
+          // console.log("data=", data.id);
+          // console.log("data=", data);
           return (
             <Items
               key={data.id}

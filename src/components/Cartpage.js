@@ -25,6 +25,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 const Cartpage = () => {
+  const total = useRef(0);
+  total.current = 0;
   let response = {
     data: [
       {
@@ -65,7 +67,50 @@ const Cartpage = () => {
       },
     ],
   };
+  // const [responsefull, setresponsefull] = useState([
+  //   {
+  //     data: [
+  //       {
+  //         id: 8,
+  //         item: "expresso1",
+  //         price: 200,
+  //         quantity: 1,
+  //       },
+  //       {
+  //         id: 9,
+  //         item: "pastry4",
+  //         price: 200,
+  //         quantity: 1,
+  //       },
+  //       {
+  //         id: 10,
+  //         item: "expresso1",
+  //         price: 200,
+  //         quantity: 1,
+  //       },
+  //     ],
+  //     username: "user",
+  //   },
+  //   {
+  //     data: [
+  //       {
+  //         id: 11,
+  //         item: "pastry4",
+  //         price: 200,
+  //         quantity: 1,
+  //       },
+  //       {
+  //         id: 12,
+  //         item: "expresso1",
+  //         price: 200,
+  //         quantity: 1,
+  //       },
+  //     ],
+  //     username: "user1",
+  //   },
+  // ]);
   const [responsefull, setresponsefull] = useState([]);
+  const [load, setload] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,10 +125,38 @@ const Cartpage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [load]);
+
+  const deleteitem = (item) => {
+    console.log("item=", item);
+    const data = {
+      item: item,
+      username: location.state.name,
+    };
+    console.log("delete item    =   ", data);
+    try {
+      axios
+        .delete("http://127.0.0.1:5000/cart", {
+          headers: {
+            "Content-Type": "application/json", // Set the Content-Type header
+          },
+          data,
+        })
+        .then((response) => {
+          console.log(response.data);
+          setload(!load);
+          console.log("before", load);
+          // setresponsefull((responsefull) => {
+          //   return responsefull.filter((cartItem) => cartItem.item !== item);
+          // });
+        });
+    } catch (e) {
+      console.log("Item cannot be deleted from cart", e);
+    }
+  };
   const location = useLocation();
   console.log("state in cart", location);
-  const total = useRef(0);
+
   const [showtotal, setshowtotal] = useState(false);
 
   const Cart = () => {
@@ -92,7 +165,7 @@ const Cartpage = () => {
       response = responsefull.filter((data) => {
         return data.username === location.state.name;
       });
-      console.log("respome cart", response);
+      console.log("response cart", response);
       return (
         <>
           <TableContainer>
@@ -116,28 +189,37 @@ const Cartpage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {response.map((data) => {
-                  total.current = total.current + data.price * data.quantity;
+                {response?.map((item) => {
+                  const { data } = item;
+                  console.log("data", data);
+                  total.current = 0;
+                  data.map((data) => {
+                    total.current += data.price * data.quantity;
+                  });
+
                   return (
                     <>
-                      <Tr>
-                        <Td>{data.item}</Td>
-                        <Td>{data.quantity}</Td>
-                        <Td>${data.price}</Td>
-                        <Td>${data.price * data.quantity}</Td>
-                        <Td>
-                          <Tooltip label="Delete Item">
-                            <IconButton
-                              isRound={true}
-                              variant="outline"
-                              colorScheme="red"
-                              aria-label="Delete"
-                              fontSize="20px"
-                              icon={<DeleteIcon />}
-                            />
-                          </Tooltip>
-                        </Td>
-                      </Tr>
+                      {data.map((data) => (
+                        <Tr>
+                          <Td>{data.item}</Td>
+                          <Td>{data.quantity}</Td>
+                          <Td>${data.price}</Td>
+                          <Td>${data.price * data.quantity}</Td>
+                          <Td>
+                            <Tooltip label="Delete Item">
+                              <IconButton
+                                onClick={() => deleteitem(data.item)}
+                                isRound={true}
+                                variant="outline"
+                                colorScheme="red"
+                                aria-label="Delete"
+                                fontSize="20px"
+                                icon={<DeleteIcon />}
+                              />
+                            </Tooltip>
+                          </Td>
+                        </Tr>
+                      ))}
                     </>
                   );
                 })}
@@ -164,6 +246,7 @@ const Cartpage = () => {
         <>
           {responsefull.map((resp) => {
             console.log("resp", resp);
+            total.current = 0;
             return (
               <Card key={resp.username}>
                 <CardHeader>

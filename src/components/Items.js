@@ -72,6 +72,20 @@ export const Items = ({ props, name }) => {
   }
   function addItem() {
     console.log("add item    =   ", props);
+    const data = {
+      item: props.item, // Make sure 'props.item' contains the correct item name
+      quantity: order.current > 0 ? order.current : 1, // Set the quantity to a valid value (you can change this as needed)
+      price: props.price,
+      username: name, // Make sure 'props.price' contains the correct price
+    };
+    console.log("add item    =   ", data);
+    try {
+      axios.post("http://127.0.0.1:5000/cart", data).then((response) => {
+        console.log(response.data);
+      });
+    } catch (e) {
+      console.log("Item cannot be added to cart", e);
+    }
   }
   function Bodytype({ user }) {
     if (user) {
