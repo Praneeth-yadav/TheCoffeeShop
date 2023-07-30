@@ -91,7 +91,7 @@ export const Items = ({ props, name }) => {
     if (user) {
       return (
         <>
-          <Text>{props.desc}</Text>
+          <Text>{props.description}</Text>
           <Text color="green.500" fontSize="l">
             Available quanity {props.quantity}
           </Text>
@@ -113,7 +113,7 @@ export const Items = ({ props, name }) => {
             focusBorderColor="lime"
             variant="outline"
             name="description"
-            defaultValue={props.desc}
+            defaultValue={props.description}
             onChange={handledesc}
           />
 
