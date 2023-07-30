@@ -5,6 +5,7 @@ import axios from "axios";
 
 const Login = () => {
   let users = null;
+  const [loggedin, setloggedin] = useState(false);
   useEffect(() => {
     try {
       axios.get(`http://127.0.0.1:5000/login`).then((res) => {
@@ -15,7 +16,7 @@ const Login = () => {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [loggedin]);
   const navigate = useNavigate();
   const username = useRef("");
   const password = useRef("");
@@ -27,9 +28,12 @@ const Login = () => {
   //   { username: "Praneeth", password: "Password" },
   //   { username: "Admin", password: "Admin" },
   // ];
+  console.log(username.current.value, " --- ", password.current.value);
   const handleSubmit = (e) => {
     e.preventDefault();
+    setloggedin(true);
     console.log(username.current.value, " --- ", password.current.value);
+    console.log(users);
     const account = users.data.find(
       (user) => user.username === username.current.value
     );
@@ -43,8 +47,11 @@ const Login = () => {
         { replace: true }
       );
     } else {
-      alert("Invalid Credentials");
+      setloggedin(true);
     }
+  };
+  const Invalidcredentials = () => {
+    return <div className={loginStyle.invalid}>Invalid Credentials</div>;
   };
   return (
     <div className={loginStyle.inputform}>
@@ -64,6 +71,7 @@ const Login = () => {
           ref={password}
           placeholder="Password"
         />
+        {loggedin && <Invalidcredentials />}
         <input className={loginStyle.btn} type="submit" value="Submit" />
       </form>
       <div>
