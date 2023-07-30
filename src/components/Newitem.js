@@ -27,43 +27,8 @@ export const Newitem = ({ setload }) => {
     },
     [imageurl]
   );
-  const checkimage = () => {
-    if (imageurl.current == null) {
-      return true;
-    }
-    return false;
-  };
 
   const additem = async () => {
-    // const imgurl = await fetchurl();
-
-    // if (imageurl==null) {
-    //   console.log("Retrying to fetch image url...");
-    //   const retryURLFetched = await fetchurl();
-
-    //   if (!retryURLFetched) {
-    //     console.log("Still unable to fetch image url. Aborting item addition.");
-    //     alert("Item cannot be added. Try Again");
-    //     return;
-    //   }
-    // }
-    /////////////
-    // while (imageurl.current == null) {
-    //   console.log("in while");
-    //   console.log("image current-1-", imageurl.current);
-    //   setTimeout(() => {
-    //     console.log(" process inprogress!");
-    //   }, 9000);
-    //   await getDownloadURL(ref(storage, `images/${itemname}`))
-    //     .then((url) => {
-    //       imageurl.current = url;
-    //       console.log("image url current", imageurl.current);
-    //     })
-    //     .catch((error) => {
-    //       console.log("Error retreiving image url", error);
-    //     });
-    //   console.log("image current-2-", imageurl.current);
-    // }
     const data = { desc, price, qty, category, imageurl, storage };
     console.log("item to be added -  ", data);
     const date = new Date();
