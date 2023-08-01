@@ -104,6 +104,19 @@ export function Newuser() {
       }
       if (!useraccount && !emailaccount) {
         dispatch({ type: "success" });
+        const data = {
+          username: username.current.value,
+          password: password.current.value,
+          email: email.current.value,
+        };
+        console.log("add user    =   ", data);
+        try {
+          axios.post("http://127.0.0.1:5000/adduser", data).then((response) => {
+            console.log(response.data);
+          });
+        } catch (e) {
+          console.log("Item cannot be added to cart", e);
+        }
       }
     }
   };
@@ -116,7 +129,7 @@ export function Newuser() {
           display: state.submitted ? "" : "none",
         }}
       >
-        <h1>User {username.current.value} successfully registered!!</h1>
+        <h1> {username.current.value} successfully registered!!</h1>
       </div>
     );
   };
@@ -194,7 +207,7 @@ export function Newuser() {
           {state.emailexist && <Existingemail />}
         </div>
         <div>
-          <a onClick={() => navigate("/", { replace: true })}>Existing user</a>
+          <a onClick={() => navigate("/", { replace: true })}>Login Page</a>
         </div>
       </div>
     </>

@@ -75,7 +75,9 @@ const Login = () => {
         <input className={loginStyle.btn} type="submit" value="Submit" />
       </form>
       <div>
-        <a onClick={() => navigate("./newuser", { replace: true })}>New User</a>
+        <a onClick={() => navigate("./newuser", { replace: true })}>
+          New User? Register
+        </a>
       </div>
     </div>
   );

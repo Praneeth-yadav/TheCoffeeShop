@@ -58,7 +58,27 @@ def login():
         return response, 500
     
 
-    
+@app.route('/adduser',methods=["POST"])
+def adduser():
+    try:
+            data = request.json
+            conn = mysql.connect()
+            cursor =conn.cursor()
+            print(data)
+            username = data.get('username')
+            email = data.get('email')
+            password = data.get('password')
+            cursor.execute("insert into usercredentials(username, email, password) values (%s, %s, %s)", (username, email, password))
+            conn.commit()
+            resp = jsonify({"message": "User Added successfully"})
+            return resp
+    except Exception as e:
+        print("Error when processing the data:", str(e))
+        traceback.print_exc()
+        response = jsonify({"error": "Something went wrong"})
+        return response, 500
+    finally:
+        cursor.close()
     
 
 @app.route('/items',methods=["GET","DELETE","PUT"])
