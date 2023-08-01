@@ -191,7 +191,7 @@ def cart():
 
             if existing_item:
             # If the item exists, update the quantity
-                new_quantity = existing_item[1] + quantity
+                new_quantity = existing_item[1] + int(quantity)
                 cursor.execute("UPDATE cart SET quantity = %s WHERE id = %s", (new_quantity, existing_item[0]))
             else:
             # If the item doesn't exist, insert a new row

@@ -84,7 +84,7 @@ export const Items = ({ props, name, setload, load }) => {
     try {
       axios.put("http://127.0.0.1:5000/items", data).then((response) => {
         console.log(response.data);
-         setload(!load);
+        setload(!load);
       });
     } catch (e) {
       console.log("Item cannot be Updated ", e);
