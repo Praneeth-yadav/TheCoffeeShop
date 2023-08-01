@@ -17,6 +17,7 @@ import { useCallback, useRef } from "react";
 import { Inc_dec } from "./Inc_dec";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import itemstyle from "./Items.module.css";
 
 export const Items = ({ props, name, setload, load }) => {
   //console.log("Card props", props);
@@ -222,6 +223,7 @@ export const Items = ({ props, name, setload, load }) => {
           src={props.imglocation}
           alt="Loading..."
           borderRadius="lg"
+          className={itemstyle.image}
         />
         <Stack mt="6" spacing="3">
           <Heading size="md">{props.item}</Heading>
