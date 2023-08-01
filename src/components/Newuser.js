@@ -1,121 +1,202 @@
-import React from "react";
-import { useState } from "react";
+import React, { useReducer, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import newuserStyle from "./Newuser.module.css";
+import axios from "axios";
 
 export function Newuser() {
   // States for registration
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const username = useRef("");
+  const email = useRef("");
+  const password = useRef("");
   const navigate = useNavigate();
 
-  // States for checking the errors
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(false);
-
-  // Handling the name change
-  const handleName = (e) => {
-    setName(e.target.value);
-    setSubmitted(false);
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "success":
+        return {
+          error: false,
+          submitted: true,
+          userexist: false,
+          emailexist: false,
+          loggedin: false,
+        };
+      case "usernameexist":
+        return {
+          error: false,
+          submitted: false,
+          userexist: true,
+          emailexist: false,
+          loggedin: false,
+        };
+      case "emailexist":
+        return {
+          error: false,
+          submitted: false,
+          userexist: false,
+          emailexist: true,
+          loggedin: false,
+        };
+      case "error":
+        return {
+          error: true,
+          submitted: false,
+          userexist: false,
+          emailexist: false,
+          loggedin: false,
+        };
+      case "loggedin":
+        return {
+          error: true,
+          submitted: state.submitted,
+          userexist: state.userexist,
+          emailexist: state.email,
+          loggedin: true,
+        };
+      default:
+        return state;
+    }
   };
+  const [state, dispatch] = useReducer(reducer, {
+    error: false,
+    submitted: false,
+    userexist: false,
+    emailexist: false,
+    loggedin: false,
+  });
+  let users = {};
+  useEffect(() => {
+    try {
+      axios.get(`http://127.0.0.1:5000/login`).then((res) => {
+        console.log("result=", res);
+        users = res;
+        console.log("users", users);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  });
 
-  // Handling the email change
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-    setSubmitted(false);
-  };
-
-  // Handling the password change
-  const handlePassword = (e) => {
-    setPassword(e.target.value);
-    setSubmitted(false);
-  };
-
-  // Handling the form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name === "" || email === "" || password === "") {
-      setError(true);
+    console.log("in submit", e);
+
+    dispatch({ type: "loggedin" });
+    e.preventDefault();
+    if (
+      username.current.value === "" ||
+      email.current.value === "" ||
+      password.current.value === ""
+    ) {
+      dispatch({ type: "error" });
     } else {
-      setSubmitted(true);
-      setError(false);
+      const useraccount = users.data.some(
+        (user) => user.username === username.current.value
+      );
+      if (useraccount) {
+        dispatch({ type: "usernameexist" });
+      }
+      const emailaccount = users.data.some(
+        (user) => user.email === email.current.value
+      );
+      if (emailaccount) {
+        dispatch({ type: "emailexist" });
+      }
+      if (!useraccount && !emailaccount) {
+        dispatch({ type: "success" });
+      }
     }
   };
 
-  // Showing success message
-  const successMessage = () => {
+  const Successmessage = () => {
     return (
       <div
         className="success"
         style={{
-          display: submitted ? "" : "none",
+          display: state.submitted ? "" : "none",
         }}
       >
-        <h1>User {name} successfully registered!!</h1>
+        <h1>User {username.current.value} successfully registered!!</h1>
       </div>
     );
   };
 
-  // Showing error message if error is true
-  const errorMessage = () => {
+  const Errormessage = () => {
     return (
       <div
         className="error"
         style={{
-          display: error ? "" : "none",
+          display: state.error ? "" : "none",
         }}
       >
         <h1>Please enter all the fields</h1>
       </div>
     );
   };
+  const Existingusername = () => {
+    return (
+      <div
+        className="error"
+        style={{
+          display: state.userexist ? "" : "none",
+        }}
+      >
+        <h1>Username alredy exist</h1>
+      </div>
+    );
+  };
+  const Existingemail = () => {
+    return (
+      <div
+        className="error"
+        style={{
+          display: state.emailexist ? "" : "none",
+        }}
+      >
+        <h1>Email alredy exist</h1>
+      </div>
+    );
+  };
 
   return (
-    <div className={newuserStyle.form}>
-      <div>
-        <h1>User Registration</h1>
+    <>
+      <div className={newuserStyle.inputform}>
+        <p>Welcome To The Coffee Shop</p>
+        <form onSubmit={handleSubmit}>
+          <input
+            className={newuserStyle.btn}
+            type="text"
+            name="Username"
+            ref={username}
+            placeholder="Username"
+          />
+          <input
+            className={newuserStyle.btn}
+            type="text"
+            name="email"
+            ref={email}
+            placeholder="email"
+          />
+          <input
+            className={newuserStyle.btn}
+            type="password"
+            name="Password"
+            ref={password}
+            placeholder="Password"
+          />
+
+          <input className={newuserStyle.btn} type="submit" value="Submit" />
+        </form>
+        <div className={newuserStyle.invalid}>
+          {state.error && <Errormessage />}
+          {state.submitted && <Successmessage />}
+          {state.userexist && <Existingusername />}
+          {state.emailexist && <Existingemail />}
+        </div>
+        <div>
+          <a onClick={() => navigate("/", { replace: true })}>Existing user</a>
+        </div>
       </div>
-
-      {/* Calling to the methods */}
-      <div className="messages">
-        {errorMessage()}
-        {successMessage()}
-      </div>
-
-      <form>
-        {/* Labels and inputs for form data */}
-        <label className="label">Name</label>
-        <input
-          onChange={handleName}
-          className="input"
-          value={name}
-          type="text"
-        />
-
-        <label className="label">Email</label>
-        <input
-          onChange={handleEmail}
-          className="input"
-          value={email}
-          type="email"
-        />
-
-        <label className="label">Password</label>
-        <input
-          onChange={handlePassword}
-          className="input"
-          value={password}
-          type="password"
-        />
-
-        <button onClick={handleSubmit} className="btn" type="submit">
-          Submit
-        </button>
-      </form>
-      <div>
-        <a onClick={() => navigate("/", { replace: true })}>Existing user</a>
-      </div>
-    </div>
+    </>
   );
 }
