@@ -116,6 +116,7 @@ export const Newitem = ({ setload }) => {
           <InputGroup size="sm">
             <InputLeftAddon children="$" />
             <Input
+              type="number"
               placeholder="Price"
               onChange={(e) => {
                 price.current = e.target.value;
