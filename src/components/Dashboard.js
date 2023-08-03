@@ -10,7 +10,7 @@ import axios from "axios";
 
 const Dashboard = () => {
   const [load, setload] = useState(false);
-  let response = {
+  const response = useRef({
     data: [
       {
         addedBy: "",
@@ -25,13 +25,13 @@ const Dashboard = () => {
         updatedDate: "",
       },
     ],
-  };
+  });
   const navigate = useNavigate();
   const location = useLocation();
   console.log("location data:  ", location);
 
   const [authenticated, setauthenticated] = useState(null);
-  const [search, setsearch] = useState(response.data);
+  const [search, setsearch] = useState(response.current.data);
   const [searchval, setsearchval] = useState();
 
   console.log("Auth ", authenticated);
@@ -50,6 +50,7 @@ const Dashboard = () => {
         const res = await axios.get("http://127.0.0.1:5000/items");
         console.log("result=", res);
         setsearch(res.data);
+        response.current = res.data;
         console.log("response=", res.data);
       } catch (e) {
         console.log(e);
@@ -66,11 +67,16 @@ const Dashboard = () => {
   }
   const searchitem = (e) => {
     e.preventDefault();
-    // console.log("search bar-", e.target.value);
+    console.log("search bar-", e.target.value);
     setsearchval(e.target.value);
-    // console.log("search val-", searchval);
-    const resp1 = response.data.filter((data) => {
-      return (data.item || data.category).includes(e.target.value);
+    const searchValue = e.target.value;
+    console.log("search val-", searchval);
+    console.log("Response obj", response.current);
+
+    const resp1 = response.current.filter((data) => {
+      return (data.item.toLowerCase() || data.category.toLowerCase()).includes(
+        e.target.value.toLowerCase()
+      );
     });
     console.log("resp1=", resp1);
     setsearch(resp1);
