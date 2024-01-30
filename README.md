@@ -65,22 +65,4 @@ Existing user -> Login
 Admin can view all the orders and their total price along with the customer name
 ![](./Images/orders.png)
 
-### Credits
 
-praneeth eraganaboina
-blazer id :peragana
-
-Krishna Lalitha Shravya Bethanabhotla
-blazer id: kbethana
-
-Sathvik chiluvuri
-bazer id: schiluvu
-
-Chalasani Kiran Chand
-Blazer id: kchalasa
-
-Bhavya boppa
-blazer id: bboppa
-
-Sriya Datta Talluri
-blazer id: talluris
